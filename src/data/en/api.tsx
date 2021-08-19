@@ -9,6 +9,8 @@ import * as tableStyles from "../../styles/table.module.css"
 import TabGroup from "../../components/TabGroup"
 import formStateUseEffect from "../../components/codeExamples/formStateUseEffect"
 import formStateUseEffectTs from "../../components/codeExamples/formStateUseEffectTs"
+import defaultValues from "../../components/codeExamples/defaultValues"
+import defaultValuesTs from "../../components/codeExamples/defaultValuesTs"
 
 export default {
   title: "API Documentation",
@@ -123,7 +125,7 @@ export default {
           <code>useForm()</code> to populate the default values for the entire
           form, or set values on an individual{" "}
           <Link to={"/api/usecontroller/controller"}>Controller</Link> component
-          via its <code>defaultValue</code> property. If both
+          via its <code>defaultValue</code> property. If both{" "}
           <code>defaultValue</code> and <code>defaultValues</code> are set, the
           value from <code>defaultValues</code> will be used.
         </p>
@@ -175,6 +177,19 @@ export default {
           </li>
           <li>
             <p>
+              <code>defaultValues</code> will be shallowly merged with form
+              submission data.
+            </p>
+
+            <CodeArea
+              url="https://codesandbox.io/s/react-hook-form-defaultvalues-v7-vd85w"
+              rawData={defaultValues}
+              tsUrl="https://codesandbox.io/s/react-hook-form-defaultvalues-v6-ts-forked-7z3v0"
+              tsRawData={defaultValuesTs}
+            />
+          </li>
+          <li>
+            <p>
               From version 7.6.0 onwards with <code>shouldUnregister</code> set
               to <>false</>, any missing registered inputs from{" "}
               <code>defaultValues</code> will get automatically registered.
@@ -219,20 +234,14 @@ export default {
 };`}
             />
           </li>
-          <li>
-            <p>
-              <code>defaultValues</code> will be shallowly merged with form
-              submission data.
-            </p>
-          </li>
         </ul>
       </>
     ),
     reValidateMode: (
       <p>
         This option allows you to configure when inputs with errors get
-        re-validated after submit. By default, validation is only triggered
-        during an input change.
+        re-validated <strong>after</strong> submit. By default, validation is
+        only triggered during an input change.
       </p>
     ),
     validationFields: (
@@ -305,6 +314,13 @@ export default {
           </li>
         </ul>
       </>
+    ),
+    delayError: (
+      <p>
+        This config will delay the error state to be displayed to the end-user
+        in milliseconds. Correct the error input will remove the error instantly
+        and delay will not be applied.
+      </p>
     ),
   },
   unregister: {
@@ -573,7 +589,7 @@ const { onChange } = register('lastChange'); // this onChange method can update 
           />
 
           <h4 className={typographyStyles.questionTitle}>
-            custom onChange, onBlur
+            Custom onChange, onBlur
           </h4>
 
           <p>
@@ -928,6 +944,7 @@ append({ firstName: '' });
       ),
       multiple: "Watch multiple inputs",
       all: "Watch all inputs",
+      callback: "Watch all inputs and invoke a callback",
     },
   },
   handleSubmit: {
@@ -935,7 +952,7 @@ append({ firstName: '' });
     description: (
       <>
         <p>
-          This function will received the form data if form validation is
+          This function will receive the form data if form validation is
           successful.
         </p>
 
@@ -967,6 +984,24 @@ handleSubmit(async (data) => await fetchAPI(data))`}
               </a>
               .
             </p>
+          </li>
+          <li>
+            <p>
+              During the callback, if the function itself throws an error inside
+              of <code>handleSubmit</code>, it will not swallow the error itself
+              but bubble it up instead and <code>isSubmitSuccessful</code> will
+              be remained as <code>false</code>.
+            </p>
+
+            <CodeArea
+              rawData={`const onSubmit = () => {
+  throw new Eorrr('Something is wrong')
+}
+
+handleSubmit(onSubmit).catch((e) => {
+  // you will need to catch that error
+})`}
+            />
           </li>
         </ul>
 
@@ -1059,6 +1094,28 @@ reset({ deepNest: { file: new File() } });
 `}
             />
           </li>
+          <li>
+            <p>
+              It's recommended to not invoke <code>reset</code> inside{" "}
+              <code>onReset</code> or <code>onSubmit</code> callback.
+            </p>
+            <ul>
+              <li>
+                <p>
+                  We can't set value for native input during{" "}
+                  <code>onReset</code> event.
+                </p>
+              </li>
+              <li>
+                <p>
+                  Because onSubmit callback is async and includes its validation
+                  when <code>reset</code> inside the callback it will intercept
+                  the result of formState update. This will be problematic when
+                  you subscribed to the formState.
+                </p>
+              </li>
+            </ul>
+          </li>
         </ul>
 
         <h2 className={typographyStyles.subTitle}>Props</h2>
@@ -1086,7 +1143,7 @@ reset({ deepNest: { file: new File() } });
                   <code className={typographyStyles.typeText}>object</code>
                 </td>
                 <td>
-                  <p>An optional object to reset from values.</p>
+                  <p>An optional object to reset form values.</p>
                 </td>
               </tr>
               <tr>

@@ -55,6 +55,7 @@ export default ({ currentLanguage }) => {
   shouldFocusError: true,
   shouldUnregister: false,
   shouldUseNativeValidation: false,
+  delayError: undefined
 })`}
               tsRawData={`type FormInputs = {
   firstName: string;
@@ -70,6 +71,7 @@ const { register } = useForm<FormInputs>({
   criteriaMode: "firstError",
   shouldFocusError: true,
   shouldUnregister: false,
+  delayError: undefined
 })`}
             />
 
@@ -84,6 +86,11 @@ const { register } = useForm<FormInputs>({
             </h5>
 
             <div className={tableStyles.tableWrapper}>
+              <p>
+                This option allows you to configure the validation before{" "}
+                <code>onSubmit</code> event.
+              </p>
+
               <table className={tableStyles.table}>
                 <tbody>
                   <tr>
@@ -142,13 +149,7 @@ const { register } = useForm<FormInputs>({
                 />
               </h5>
 
-              <table>
-                <tbody>
-                  <tr>
-                    <td>{api.useForm.reValidateMode}</td>
-                  </tr>
-                </tbody>
-              </table>
+              {api.useForm.reValidateMode}
             </div>
 
             <h5 className={typographyStyles.h5} style={{ marginTop: 20 }}>
@@ -161,13 +162,6 @@ const { register } = useForm<FormInputs>({
             </h5>
 
             {api.useForm.defaultValues}
-
-            <CodeArea
-              url="https://codesandbox.io/s/react-hook-form-defaultvalues-v7-vd85w"
-              rawData={defaultValues}
-              tsUrl="https://codesandbox.io/s/react-hook-form-defaultvalues-v6-ts-forked-7z3v0"
-              tsRawData={defaultValuesTs}
-            />
 
             <div className={tableStyles.tableWrapper}>
               <table className={tableStyles.table}>
@@ -233,6 +227,24 @@ const { register } = useForm<FormInputs>({
                     </td>
                     <td>{api.useForm.shouldUnregister}</td>
                   </tr>
+                  <tr>
+                    <td>
+                      <p>
+                        <code>delayError</code>
+                        <br />
+                        <code className={typographyStyles.typeText}>
+                          number
+                        </code>
+                      </p>
+                    </td>
+                    <td>{api.useForm.delayError}</td>
+                    <td>
+                      <CodeSandBoxLink
+                        style={codeSandBoxStyle}
+                        url="https://codesandbox.io/s/useform-delayerror-q6c2d"
+                      />
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -240,7 +252,7 @@ const { register } = useForm<FormInputs>({
             <h5
               className={typographyStyles.h5}
               style={{ marginTop: 20 }}
-              id="validationResolver"
+              id="resolver"
             >
               <code>
                 shouldUseNativeValidation:{" "}
