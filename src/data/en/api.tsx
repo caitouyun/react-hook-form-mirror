@@ -310,6 +310,42 @@ export default {
                   only registered input will be included as submission data.
                 </p>
               </li>
+              <li>
+                <p>
+                  unmounted input will need to notify at either{" "}
+                  <code>useForm</code>, or <code>useWatch</code>'s{" "}
+                  <code>useEffect</code> for hook form to verify input is
+                  unmounted from the DOM.
+                </p>
+
+                <CodeArea
+                  rawData={`const NotWork = () => {
+  const [show, setShow] = React.useState(false);
+  // ❌ won't get notified, need to invoke unregister
+  return {show && <input {...register('test')} />}                
+}
+
+const Work = () => {
+  const { show } = useWatch()
+  // ✅ get notified at useEffect
+  return {show && <input {...register('test1')} />}                
+}
+
+const App = () => {
+  const [show, setShow] = React.useState(false);
+  const { control } = useForm({ shouldUnregister: true });
+  return (
+    <div>
+      // ✅ get notified at useForm's useEffect
+      {show && <input {...register('test2')} />}                
+      <NotWork />
+      <Work control={control} />
+    </div>
+  )
+}
+`}
+                />
+              </li>
             </ul>
           </li>
         </ul>
@@ -332,6 +368,31 @@ export default {
           array of inputs. It also provides a second optional argument to keep
           state after unregistering an input.
         </p>
+
+        <h2 className={typographyStyles.subTitle}>Rules</h2>
+
+        <ul>
+          <li>
+            <p>
+              This method will remove input reference and its value which means{" "}
+              <b>build-in validation</b> rules will be removed as well.
+            </p>
+          </li>
+          <li>
+            <p>
+              By <code>unregister</code> an input, it will not affect or
+              unregister your schema validation.
+            </p>
+            <CodeArea
+              rawData={`const schema = yup.object().shape({
+  firstName: yup.string().required()
+});
+
+unregister("firstName"); // this will not remove the validation against firstName input
+`}
+            />
+          </li>
+        </ul>
 
         <div className={tableStyles.tableWrapper}>
           <h2 className={typographyStyles.subTitle}>Props</h2>
@@ -925,6 +986,13 @@ append({ firstName: '' });
               experiencing performance issues.
             </p>
           </li>
+          <li>
+            <p>
+              <code>watch</code> result is optimised for render phase instead of{" "}
+              <code>useEffect</code>'s deps, to detect value update you may want
+              to use an external custom hook for value comparison.
+            </p>
+          </li>
         </ul>
       </>
     ),
@@ -995,7 +1063,7 @@ handleSubmit(async (data) => await fetchAPI(data))`}
 
             <CodeArea
               rawData={`const onSubmit = () => {
-  throw new Eorrr('Something is wrong')
+  throw new Error('Something is wrong')
 }
 
 handleSubmit(onSubmit).catch((e) => {
@@ -1029,7 +1097,7 @@ handleSubmit(onSubmit).catch((e) => {
                 <td>
                   <code
                     className={typographyStyles.typeText}
-                  >{`(errors: Object, e?: Event) => void) => void`}</code>
+                  >{`(errors: Object, e?: Event) => void`}</code>
                 </td>
                 <td>An error callback.</td>
               </tr>
@@ -1169,9 +1237,15 @@ reset({ deepNest: { file: new File() } });
                 </td>
                 <td>
                   <p>
-                    <code>DirtyFields</code> will remain, and{" "}
+                    <code>DirtyFields</code> form state will remain, and{" "}
                     <code>isDirty</code> will be temporarily remain as the
                     current state until further user's action.
+                  </p>
+
+                  <p>
+                    <b className={typographyStyles.note}>Important: </b>this
+                    keep option doesn't reflect form input values but only dirty
+                    fields form state.
                   </p>
                 </td>
               </tr>
@@ -2170,6 +2244,19 @@ append({ firstName: 'bill', lastName: 'luo' }); ✅`}
             </code>
           </td>
           <td>Update input/inputs at particular position.</td>
+        </tr>
+        <tr>
+          <td>
+            <code>replace</code>
+          </td>
+          <td>
+            <code>
+              <code className={typographyStyles.typeText}>
+                (obj: object[]) =&gt; void
+              </code>
+            </code>
+          </td>
+          <td>Replace the entire field array values.</td>
         </tr>
         <tr>
           <td>

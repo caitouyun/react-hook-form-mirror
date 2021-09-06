@@ -118,9 +118,7 @@ export default function ApiRefTable({
               <td>
                 <code>ref</code>
                 <br />
-                <code className={typographyStyles.typeText}>
-                  React.RefObject
-                </code>
+                <code className={typographyStyles.typeText}>React.Ref</code>
               </td>
               <td>React element ref</td>
               <td>
@@ -141,7 +139,7 @@ export default function ApiRefTable({
                     : `string |
 {
   value: boolean,
-  message: string | React.ReactElement
+  message: string
 }`}
                 </code>
               </td>
@@ -172,7 +170,7 @@ export default function ApiRefTable({
                       ? "number"
                       : `{
   value: number,
-  message: string | React.ReactElement
+  message: string
 }`}
                   </code>
                 </code>
@@ -207,7 +205,7 @@ export default function ApiRefTable({
                       ? "number"
                       : `{
   value: number,
-  message: string | React.ReactElement
+  message: string
 }`}
                   </code>
                 </code>
@@ -242,7 +240,7 @@ export default function ApiRefTable({
                       ? "number"
                       : `{
   value: number,
-  message: string | React.ReactElement
+  message: string
 }`}
                   </code>
                 </code>
@@ -278,7 +276,7 @@ export default function ApiRefTable({
                       ? "number"
                       : `{
   value: number,
-  message: string | React.ReactElement
+  message: string
 }`}
                   </code>
                 </code>
@@ -314,7 +312,7 @@ export default function ApiRefTable({
                       ? "RegExp"
                       : `{
   value: RegExp,
-  message: string | React.ReactElement
+  message: string
 }`}
                   </code>
                 </code>
@@ -502,6 +500,31 @@ export default function ApiRefTable({
   type="number"
   {...register("test", {
     setValueAs: v => parseInt(v),
+  })}
+/>`}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code>disabled</code>
+                <br />
+                <code
+                  className={typographyStyles.typeText}
+                >{`boolean = false`}</code>
+              </td>
+              <td>
+                Set <code>disabled</code> to <code>true</code> will lead input
+                value to be <code>undefined</code> and input control to be
+                disabled.
+              </td>
+              <td>
+                <CodeArea
+                  style={{ marginTop: -10 }}
+                  withOutCopy
+                  rawData={`<input
+  {...register("test", {
+    disabled: true
   })}
 />`}
                 />

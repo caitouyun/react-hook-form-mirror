@@ -10,10 +10,12 @@ export default function ApiRefTableV6({
   goToSection,
   api,
   currentLanguage,
+  skipValueAs,
 }: {
   api: any
   goToSection: (name: string, animate?: boolean) => void
   currentLanguage: string
+  skipValueAs?: boolean
 }) {
   const [isStandard, toggleOption] = React.useState(true)
   const highlightContainer = React.useRef<HTMLTableElement | null>(null)
@@ -144,7 +146,7 @@ export default function ApiRefTableV6({
                     : `string |
 {
   value: boolean,
-  message: string | React.ReactElement
+  message: string
 }`}
                 </code>
               </td>
@@ -179,7 +181,7 @@ export default function ApiRefTableV6({
                       ? "number"
                       : `{
   value: number,
-  message: string | React.ReactElement
+  message: string
 }`}
                   </code>
                 </code>
@@ -218,7 +220,7 @@ export default function ApiRefTableV6({
                       ? "number"
                       : `{
   value: number,
-  message: string | React.ReactElement
+  message: string
 }`}
                   </code>
                 </code>
@@ -257,7 +259,7 @@ export default function ApiRefTableV6({
                       ? "number"
                       : `{
   value: number,
-  message: string | React.ReactElement
+  message: string
 }`}
                   </code>
                 </code>
@@ -297,7 +299,7 @@ export default function ApiRefTableV6({
                       ? "number"
                       : `{
   value: number,
-  message: string | React.ReactElement
+  message: string
 }`}
                   </code>
                 </code>
@@ -337,7 +339,7 @@ export default function ApiRefTableV6({
                       ? "RegExp"
                       : `{
   value: RegExp,
-  message: string | React.ReactElement
+  message: string
 }`}
                   </code>
                 </code>
@@ -418,27 +420,30 @@ export default function ApiRefTableV6({
                 />
               </td>
             </tr>
-            <tr>
-              <td>
-                valueAsNumber:
-                <br />
-                <code className={typographyStyles.typeText}>boolean</code>
-              </td>
-              <td>
-                <p>
-                  Returns a Number normally. If something goes wrong{" "}
-                  <code>NaN</code> will be returned.
-                </p>
-                <p>
-                  <b className={typographyStyles.note}>Note</b>:{" "}
-                  <code>valueAs</code> process is happening after validation.
-                </p>
-              </td>
-              <td>
-                <CodeArea
-                  style={{ marginTop: -10 }}
-                  withOutCopy
-                  rawData={`<input
+            {!skipValueAs && (
+              <>
+                <tr>
+                  <td>
+                    valueAsNumber:
+                    <br />
+                    <code className={typographyStyles.typeText}>boolean</code>
+                  </td>
+                  <td>
+                    <p>
+                      Returns a Number normally. If something goes wrong{" "}
+                      <code>NaN</code> will be returned.
+                    </p>
+                    <p>
+                      <b className={typographyStyles.note}>Note</b>:{" "}
+                      <code>valueAs</code> process is happening after
+                      validation.
+                    </p>
+                  </td>
+                  <td>
+                    <CodeArea
+                      style={{ marginTop: -10 }}
+                      withOutCopy
+                      rawData={`<input
   name="test"
   type="number"
   ref={
@@ -447,31 +452,32 @@ export default function ApiRefTableV6({
     })
   }
 />`}
-                  url="https://codesandbox.io/s/react-hook-form-validation-valueasnumber-8v2t3?file=/src/App.jsx"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                valueAsDate:
-                <br />
-                <code className={typographyStyles.typeText}>boolean</code>
-              </td>
-              <td>
-                <p>
-                  Returns a Date normally. If something goes wrong{" "}
-                  <code>null</code> will be returned.
-                </p>
-                <p>
-                  <b className={typographyStyles.note}>Note</b>:{" "}
-                  <code>valueAs</code> process is happening after validation.
-                </p>
-              </td>
-              <td>
-                <CodeArea
-                  style={{ marginTop: -10 }}
-                  withOutCopy
-                  rawData={`<input
+                      url="https://codesandbox.io/s/react-hook-form-validation-valueasnumber-8v2t3?file=/src/App.jsx"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    valueAsDate:
+                    <br />
+                    <code className={typographyStyles.typeText}>boolean</code>
+                  </td>
+                  <td>
+                    <p>
+                      Returns a Date normally. If something goes wrong{" "}
+                      <code>null</code> will be returned.
+                    </p>
+                    <p>
+                      <b className={typographyStyles.note}>Note</b>:{" "}
+                      <code>valueAs</code> process is happening after
+                      validation.
+                    </p>
+                  </td>
+                  <td>
+                    <CodeArea
+                      style={{ marginTop: -10 }}
+                      withOutCopy
+                      rawData={`<input
   name="test"
   type="date"
   ref={
@@ -480,33 +486,33 @@ export default function ApiRefTableV6({
     })
   }
 />`}
-                  url="https://codesandbox.io/s/react-hook-form-validation-valueasdate-700wc?file=/src/App.jsx"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                setValueAs:
-                <br />
-                <code
-                  className={typographyStyles.typeText}
-                >{`<T>(value: any) => T`}</code>
-              </td>
-              <td>
-                <p>Return input value by running through the function.</p>
-                <p>
-                  <b className={typographyStyles.note}>Note</b>:{" "}
-                  <code>valueAs</code> process is happening after validation.
-                  Also, <code>setValueAs</code> is ignored if either{" "}
-                  <code>valueAsNumber</code> or <code>valueAsDate</code> are{" "}
-                  <code>true</code>.
-                </p>
-              </td>
-              <td>
-                <CodeArea
-                  style={{ marginTop: -10 }}
-                  withOutCopy
-                  rawData={`<input
+                      url="https://codesandbox.io/s/react-hook-form-validation-valueasdate-700wc?file=/src/App.jsx"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    setValueAs:
+                    <br />
+                    <code
+                      className={typographyStyles.typeText}
+                    >{`<T>(value: any) => T`}</code>
+                  </td>
+                  <td>
+                    <p>Return input value by running through the function.</p>
+                    <p>
+                      <b className={typographyStyles.note}>Note</b>:{" "}
+                      <code>valueAs</code> process is happening after
+                      validation. Also, <code>setValueAs</code> is ignored if
+                      either <code>valueAsNumber</code> or{" "}
+                      <code>valueAsDate</code> are <code>true</code>.
+                    </p>
+                  </td>
+                  <td>
+                    <CodeArea
+                      style={{ marginTop: -10 }}
+                      withOutCopy
+                      rawData={`<input
   name="test"
   ref={
     register({
@@ -514,10 +520,12 @@ export default function ApiRefTableV6({
     })
   }
 />`}
-                  url="https://codesandbox.io/s/react-hook-form-validation-setvalueas-6lirl?file=/src/App.jsx"
-                />
-              </td>
-            </tr>
+                      url="https://codesandbox.io/s/react-hook-form-validation-setvalueas-6lirl?file=/src/App.jsx"
+                    />
+                  </td>
+                </tr>
+              </>
+            )}
           </tbody>
         </table>
       </div>

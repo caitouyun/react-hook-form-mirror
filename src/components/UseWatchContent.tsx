@@ -80,6 +80,19 @@ export default function UseFieldArray({
                 </p>
               </td>
             </tr>
+            <tr>
+              <td>
+                <code>disable</code>
+              </td>
+              <td>
+                <code className={typographyStyles.typeText}>
+                  boolean = false
+                </code>
+              </td>
+              <td>
+                <p>Option to disable the subscription.</p>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -115,6 +128,13 @@ useWatch('example'); // ✅ input value update will be received and trigger re-r
 setValue('example', 'data'); 
 `}
           />
+        </li>
+        <li>
+          <p>
+            <code>useWatch</code> result is optimised for render phase instead
+            of <code>useEffect</code>'s deps, to detect value update you may
+            want to use an external custom hook for value comparison.
+          </p>
         </li>
       </ul>
 
